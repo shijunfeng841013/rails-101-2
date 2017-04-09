@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, :only => [:new, :create]
+  before_action :authenticate_user!, :only => [:new, :create, :edit, :update, :destroy]
 
-  
+
   def new
     @group =  Group.find(params[:group_id])
     @post = Post.new
@@ -19,6 +19,34 @@ class PostsController < ApplicationController
       render :new
     end
   end
+
+  def edit
+    @group = Group.find(params[:group_id])
+    @post = Post.find(params[:id])
+  end
+
+  def update
+    @group = Group.find(params[:group_id])
+    @post = Post.find(params[:id])
+
+    if @post.save
+
+      redirect_to account_posts_path(@group)
+
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @group = Group.find(params[:group_id])
+    @post = Post.find(params[:id])
+
+    @post.destroy
+    redirect_to account_posts_path(@group)
+  end
+
+
 
   private
   def post_params
